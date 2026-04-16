@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The White Man's Burden | Digital Archive</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,700;1,400&family=Space+Mono&display=swap');
+
+        /* Archive Paper Aesthetic */
+        body { 
+            background-color: #f4f1ea; 
+            background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+            font-family: 'Crimson Pro', serif;
+            color: #2d2d2d;
+            transition: background 0.5s;
+        }
+
+        /* The "Static" Bright Spot */
+        .static-glitch {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background: rgba(255, 255, 255, 0.8);
+            filter: blur(2px);
+            cursor: crosshair;
+            animation: flicker 0.1s infinite;
+            opacity: 0.1;
+            transition: opacity 0.3s;
+        }
+        .static-glitch:hover { opacity: 1; box-shadow: 0 0 10px white; }
+
+        @keyframes flicker {
+            0% { opacity: 0.1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.2); }
+            100% { opacity: 0.1; transform: scale(1); }
+        }
+
+        /* Dark "Evil" Overlay */
+        #secret-page {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: #0a0a0a;
+            color: #e2e2e2;
+            z-index: 100;
+            padding: 40px;
+            font-family: 'Space Mono', monospace;
+            overflow-y: auto;
+        }
+
+        .code-input {
+            border-bottom: 2px solid #2d2d2d;
+            background: transparent;
+            outline: none;
+            font-family: 'Space Mono', monospace;
+            width: 100px;
+            text-align: center;
+        }
+
+        .hidden-content { display: none; opacity: 0; transition: opacity 1s; }
+        .visible { display: block; opacity: 1; }
+    </style>
+</head>
+<body class="p-8 md:p-20">
+
+    <div id="archive-page" class="max-w-3xl mx-auto border-t-8 border-double border-stone-800 pt-12">
+        <h1 class="text-5xl font-bold uppercase tracking-tighter mb-12 text-center underline decoration-double">
+            The White Man's Burden
+        </h1>
+
+        <div class="stanza mb-12 relative">
+            <div class="static-glitch" style="top: 60px; right: 20%;" onclick="openSecret('ledger')"></div>
+            
+            <p class="text-3xl leading-relaxed">
+                'The White Man's Burden,' is a lie they tell<br>
+                While turning peaceful lands to hell
+            </p>
+        </div>
+
+        <div id="stanza-2" class="stanza mb-12">
+            <p class="text-3xl leading-relaxed">
+                A man perched upon thrones of polished oak<br>
+                dressed from head to toe in heavy silk;<br>
+                To hide their immense greed beneath a righteous cloak<br>
+                They claim their charity to be as pure as milk<br>
+                The burden is a mask they wear
+            </p>
+        </div>
+
+        <div class="mt-20 border-2 border-stone-300 p-8 text-center bg-white/50 rounded shadow-inner">
+            <p class="text-xs uppercase tracking-widest mb-4">Input Verification Code to Progress</p>
+            <input type="text" id="verify-1" class="code-input text-xl" placeholder="????">
+            <button onclick="checkCode()" class="ml-4 bg-stone-800 text-white px-6 py-2 text-xs uppercase hover:bg-red-900 transition-colors">Submit</button>
+            <p id="hint-text" class="mt-4 text-sm italic text-stone-500"></p>
+        </div>
+        
+        <div id="unlocked-stanzas" class="hidden-content mt-12 border-t-2 border-stone-200 pt-12">
+            <p class="text-3xl leading-relaxed">
+                They called the darker nations 'savage' and blind<br>
+                While leaving all ordinary human mercy behind...
+            </p>
+            </div>
+    </div>
+
+    <div id="secret-page">
+        <button onclick="closeSecret()" class="text-red-500 underline mb-10 text-xs tracking-widest">← BACK TO ARCHIVE</button>
+        
+        <div id="ledger-content">
+            <h2 class="text-red-600 text-xl font-bold mb-6">[ CLASSIFIED MANIFEST: CARGO_09 ]</h2>
+            <div class="border border-stone-800 p-6 bg-stone-900 leading-loose">
+                <p>DATE: 1898 | SHIP: SS MAJESTIC</p>
+                <hr class="border-stone-800 my-4">
+                <p>ITEM: POLISHED OAK THRONES [QTY: 12]</p>
+                <p>ITEM: <span class="text-white font-bold underline">HEAVY SILK BOLTS [QTY: 0422]</span></p>
+                <p>ITEM: OPIUM VINTAGE [QTY: 500]</p>
+                <hr class="border-stone-800 my-4">
+                <p class="text-xs italic text-stone-500 italic">"Extracted from native village at 0400 hrs. No payment rendered."</p>
+            </div>
+            <p class="mt-10 text-stone-400 text-sm">Context Clue: In the poem, what word does the author use to describe the expensive material used for the colonist's clothing? Locate the quantity of this material in the manifest above.</p>
+        </div>
+    </div>
+
+    <script>
+        function openSecret(type) {
+            document.getElementById('secret-page').style.display = 'block';
+            // Here we could switch content based on 'type'
+        }
+
+        function closeSecret() {
+            document.getElementById('secret-page').style.display = 'none';
+        }
+
+        function checkCode() {
+            const val = document.getElementById('verify-1').value;
+            // The code is 0422 (The quantity of silk found in the secret page)
+            if (val === "0422") {
+                document.getElementById('unlocked-stanzas').classList.add('visible');
+                document.getElementById('hint-text').innerText = "LAYER 01 DECRYPTED.";
+                document.getElementById('hint-text').style.color = "green";
+            } else {
+                document.getElementById('hint-text').innerText = "INVALID CODE. Investigating the glitch near 'silk' may yield results.";
+                document.getElementById('hint-text').style.color = "red";
+            }
+        }
+    </script>
+</body>
+</html>
