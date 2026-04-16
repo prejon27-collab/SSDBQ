@@ -2,168 +2,118 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Archive // Manuscript_01-A</title>
+    <title>Archive // Deconstruction 1899</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,700;1,400&family=Space+Mono&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;900&family=Space+Mono&display=swap');
         
-        :root { --ink: #2d2d2d; --paper: #f4f1ea; --truth: #8b0000; --terminal: #00ff41; }
-        body { background-color: var(--paper); font-family: 'Crimson Pro', serif; color: var(--ink); transition: all 1s; margin: 0; }
+        body { background-color: #f4f1ea; font-family: 'Crimson Pro', serif; color: #2d2d2d; transition: background 1s; }
         
-        /* Overlays */
-        #hacker-ui { display: none; position: fixed; inset: 0; z-index: 1000; padding: 40px; font-family: 'Space Mono', monospace; background: #000; color: var(--terminal); }
-        .truth-chunk { color: var(--truth); font-weight: bold; display: none; animation: fadeIn 1.5s forwards; margin-bottom: 20px; }
-        @keyframes fadeIn { from { opacity: 0; filter: blur(10px); } to { opacity: 1; filter: blur(0); } }
+        /* The "Savage" Button Styling */
+        .btn-savage {
+            color: #7c7c7c;
+            cursor: pointer;
+            font-weight: bold;
+            text-decoration: underline dotted;
+            transition: all 0.3s;
+        }
+        .btn-savage:hover {
+            color: #8b0000;
+            text-shadow: 0 0 8px rgba(139, 0, 0, 0.5);
+        }
 
-        /* Puzzle Elements */
-        .digit-slot { border: 1px solid #333; width: 50px; height: 70px; display: flex; align-items: center; justify-content: center; font-size: 2rem; }
-        .active-digit { color: var(--truth); border-color: var(--truth); text-shadow: 0 0 5px var(--truth); }
-        .redacted { background: #111; color: #111; cursor: pointer; transition: 0.3s; }
-        .redacted:hover { background: #222; color: #666; }
-        
-        .secret-input { background: transparent; border-bottom: 1px solid #004400; outline: none; width: 100%; padding: 10px 0; color: white; }
+        /* Screen Shake Glitch */
+        .glitch-shake { animation: shake 0.2s cubic-bezier(.36,.07,.19,.97) both; }
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-1px, 0, 0); }
+            20%, 80% { transform: translate3d(2px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+            40%, 60% { transform: translate3d(4px, 0, 0); }
+        }
+
+        #hacker-overlay { 
+            display: none; position: fixed; inset: 0; z-index: 1000; 
+            background: rgba(10, 10, 10, 0.98); color: #00ff41; 
+            font-family: 'Space Mono', monospace; padding: 10% 20%;
+        }
+
+        .truth-text { color: #8b0000; font-weight: bold; display: none; margin-bottom: 2rem; }
     </style>
 </head>
-<body class="p-8 md:p-24" onmouseup="checkSelection()">
+<body class="p-10 md:p-24">
 
-    <div class="max-w-3xl mx-auto">
+    <div id="main-content" class="max-w-3xl mx-auto">
         <header class="mb-12 border-b border-stone-300 pb-4">
-            <p id="meta-text" class="text-[10px] tracking-[0.4em] text-stone-400 uppercase">Ref: R. Kipling, 1899 Original Manuscript</p>
-            <h1 id="main-title" class="text-5xl font-black uppercase tracking-tighter">The White Man's Burden</h1>
+            <p class="text-[10px] tracking-[0.4em] text-stone-400 uppercase">Ref: R. Kipling, 1899 Original Manuscript</p>
+            <h1 id="title" class="text-5xl font-black uppercase">The White Man's Burden</h1>
         </header>
 
-        <div id="original-poem" class="text-2xl leading-relaxed text-stone-500 italic space-y-6">
-            <p id="kp-1">Take up the White Man’s burden— Send forth the best ye breed— Go send your sons to <span class="text-stone-600 font-bold underline decoration-dotted cursor-help">exile</span> To serve your captives' need...</p>
-            
-            <p id="kp-2">To wait in heavy harness On fluttered folk and wild— Your new-caught, sullen peoples, <span onclick="wordClick('devil')" class="cursor-pointer hover:text-black">Half devil</span> and <span onclick="wordClick('child')" class="cursor-pointer hover:text-black">half child</span>.</p>
-            
-            <p id="kp-3">Take up the White Man's burden-- The <span onclick="wordClick('savage')" class="cursor-pointer hover:text-black">savage</span> wars of peace-- Fill full the mouth of Famine And bid the sickness cease;</p>
+        <div id="kipling-area" class="text-2xl leading-relaxed text-stone-500 italic">
+            <p id="kp-segment">
+                Take up the White Man's burden-- The <span class="btn-savage" onclick="triggerSavage()">savage</span> wars of peace-- 
+                Fill full the mouth of Famine And bid the sickness cease;
+            </p>
         </div>
 
-        <div id="truth-container" class="text-2xl md:text-3xl leading-relaxed mt-4">
-            <div id="t-chunk-1" class="truth-chunk">‘The White Man’s Burden,’ is a lie they tell<br>While turning peaceful lands to hell<br>A man perched upon thrones of polished oak<br>dressed from head to toe in heavy silk;</div>
-            
-            <div id="t-chunk-2" class="truth-chunk">To hide their immense greed beneath a righteous cloak<br>They claim their charity to be as pure as milk<br>The burden is a mask they wear<br>They called the darker nations ‘savage’ and blind</div>
-            
-            <div id="t-chunk-3" class="truth-chunk">While leaving all ordinary human mercy behind<br>Condemning the savage through his lips stained with wine<br>Acting as vultures with a line and a chain<br>The savages are the ones consumed by greed—true swine who take more than they could ever need</div>
-            
-            <div id="t-chunk-4" class="truth-chunk border-t-2 border-red-900 pt-6">
-                Who ignore a fellow human’s desperate plea. The burden is a mask they wear. The savage is the one who sits in state and looks upon his brother with deep hate. The savage is not the one whom they have defined but instead the master with a cruel and narrow mind. The burden is a mask they wear. He counts dividends and carves the land, he boats of burdens -weight never truly felt- completely ignoring the pain his white hands dealt. He gifts a textbook to a mind they’ve already confined to heal the sickness only he had designed. <br><br>
-                <span class="text-4xl">The African’s weary shoulder, bruised by the White Man’s lie.</span>
+        <div id="truth-area" class="text-3xl leading-relaxed">
+            <div id="truth-stanza" class="truth-text">
+                While leaving all ordinary human mercy behind<br>
+                Condemning the savage through his lips stained with wine<br>
+                Acting as vultures with a line and a chain<br>
+                The savages are the ones consumed by greed—true swine who take more than they could ever need
             </div>
         </div>
 
-        <div class="mt-20 border-t border-stone-200 pt-10">
-            <div class="flex justify-center gap-4 mb-4">
-                <div id="s-1" class="digit-slot">?</div>
-                <div id="s-2" class="digit-slot">?</div>
-                <div id="s-3" class="digit-slot">?</div>
-                <div id="s-4" class="digit-slot">?</div>
-            </div>
-            <p id="hint-msg" class="text-center text-[10px] uppercase tracking-widest text-stone-400">Highlight the word "exile" to begin the breach.</p>
+        <div class="mt-20 border-t border-stone-200 pt-10 text-center">
+            <p id="status-hint" class="text-[10px] uppercase tracking-widest text-stone-400">Click the insult to extract the truth.</p>
         </div>
     </div>
 
-    <div id="hacker-ui">
-        <div class="max-w-xl mx-auto pt-20">
-            <div id="stage-1" class="hidden">
-                <p class="text-white mb-8">RIDDLE 01: The material of the master's vanity, woven from the threads of insanity. What does he wear?</p>
-                <input type="text" id="ans-1" class="secret-input" placeholder="Enter Answer...">
-                <button onclick="solve(1, 'silk', '1')" class="mt-4 border border-green-900 px-4 py-2 text-xs">SUBMIT</button>
-            </div>
-
-            <div id="stage-2" class="hidden text-center">
-                <p class="mb-8">RIDDLE 02: Calculate the extracted percentage of the stolen ledger.</p>
-                <div class="bg-zinc-900 p-10 mb-8 text-2xl">
-                    ( 2 * 2 * 2 ) = [?]
-                </div>
-                <input type="text" id="ans-2" class="secret-input" placeholder="Enter Calculation...">
-                <button onclick="solve(2, '8', '8')" class="mt-4 border border-green-900 px-4 py-2 text-xs">SUBMIT</button>
-            </div>
-
-            <div id="stage-3" class="hidden">
-                <p class="mb-8">RIDDLE 03: The "Savage" is not who they defined. He is the one with the narrow ____?</p>
-                <input type="text" id="ans-3" class="secret-input" placeholder="Search the revision...">
-                <button onclick="solve(3, 'mind', '9')" class="mt-4 border border-green-900 px-4 py-2 text-xs">SUBMIT</button>
-            </div>
-
-            <div id="stage-4" class="hidden">
-                <p class="mb-8 text-red-600">FINAL BREACH: The African's weary shoulder is bruised by the White Man's _____?</p>
-                <input type="text" id="ans-4" class="secret-input" placeholder="...">
-                <button onclick="solve(4, 'lie', '9')" class="mt-4 border border-red-900 px-4 py-2 text-xs text-red-600">TERMINATE NARRATIVE</button>
-            </div>
-            
-            <button onclick="closeBreach()" class="mt-20 text-[10px] text-zinc-600 underline">CLOSE BREACH</button>
+    <div id="hacker-overlay">
+        <h2 class="text-2xl mb-6 font-bold border-b border-green-900 pb-2">BREACH: STAGE_03</h2>
+        <p class="mb-8">Identify the true nature of the "Master" described in the revision.</p>
+        
+        <p class="text-xs text-green-700 mb-2">QUERY: The master has a cruel and narrow ____?</p>
+        <input type="text" id="terminal-input" class="bg-transparent border-b border-green-500 outline-none w-full text-white text-2xl py-2" placeholder="...">
+        
+        <div class="mt-10 flex gap-4">
+            <button onclick="verifyAnswer()" class="border border-green-500 px-6 py-2 hover:bg-green-500 hover:text-black transition-all">EXECUTE</button>
+            <button onclick="closeOverlay()" class="text-xs text-stone-500 underline">ABORT</button>
         </div>
     </div>
 
     <script>
-        let clicks = [];
-        let solved = 0;
-
-        // PUZZLE 1: Highlighting "Exile"
-        function checkSelection() {
-            let sel = window.getSelection().toString().toLowerCase().trim();
-            if (sel === "exile" && solved === 0) {
-                openBreach(1);
-            }
+        function triggerSavage() {
+            // Apply visual glitch to the whole body
+            document.body.classList.add('glitch-shake');
+            setTimeout(() => {
+                document.body.classList.remove('glitch-shake');
+                document.getElementById('hacker-overlay').style.display = 'block';
+                document.getElementById('terminal-input').focus();
+            }, 300);
         }
 
-        // PUZZLE 2 & 3: Word Sequencing
-        function wordClick(val) {
-            clicks.push(val);
-            const sequence = clicks.join('-');
-            if (sequence.includes('devil-child') && solved === 1) {
-                openBreach(2);
-                clicks = [];
-            } else if (sequence.includes('savage') && solved === 2) {
-                openBreach(3);
-                clicks = [];
-            }
+        function closeOverlay() {
+            document.getElementById('hacker-overlay').style.display = 'none';
         }
 
-        // PUZZLE 4: Triggered by metadata change
-        document.getElementById('meta-text').onclick = function() {
-            if (solved === 3) openBreach(4);
-        };
-
-        function openBreach(stage) {
-            document.getElementById('hacker-ui').style.display = 'block';
-            document.querySelectorAll('#hacker-ui div[id^="stage"]').forEach(d => d.classList.add('hidden'));
-            document.getElementById('stage-' + stage).classList.remove('hidden');
-        }
-
-        function closeBreach() { document.getElementById('hacker-ui').style.display = 'none'; }
-
-        function solve(stage, answer, digit) {
-            let input = document.getElementById('ans-' + stage).value.toLowerCase().trim();
-            if (input.includes(answer)) {
-                solved++;
-                document.getElementById('s-' + stage).innerText = digit;
-                document.getElementById('s-' + stage).classList.add('active-digit');
-                
-                // Show the truth chunk
-                document.getElementById('t-chunk-' + stage).style.display = 'block';
-                
-                // Remove original Kipling chunk
-                if (stage <= 3) document.getElementById('kp-' + stage).style.display = 'none';
-                
-                // Update Hints
-                const hints = [
-                    "",
-                    "The digit 1 is found. Sequence required: Click 'Half Devil' then 'Half Child'.",
-                    "The digit 8 is found. Click the word 'Savage' to proceed.",
-                    "The digit 9 is found. Click the Archive 'Ref:' metadata at the very top.",
-                    "The Truth is complete."
-                ];
-                document.getElementById('hint-msg').innerText = hints[solved];
-
-                if (solved === 4) {
-                    document.getElementById('main-title').innerText = "The White Man's Lie";
-                    document.getElementById('main-title').style.color = "#8b0000";
-                    document.body.style.backgroundColor = "#fffcfc";
-                }
-                closeBreach();
+        function verifyAnswer() {
+            const input = document.getElementById('terminal-input').value.toLowerCase().trim();
+            
+            // The Riddle Answer: "mind"
+            if (input === "mind") {
+                // Hide the Kipling text
+                document.getElementById('kipling-area').style.display = 'none';
+                // Show the Truth text
+                document.getElementById('truth-stanza').style.display = 'block';
+                // Update Title and Background
+                document.getElementById('title').innerText = "The White Man's Lie";
+                document.getElementById('title').style.color = "#8b0000";
+                document.body.style.backgroundColor = "#fffcfc";
+                document.getElementById('status-hint').innerText = "DECONSTRUCTION COMPLETE.";
+                closeOverlay();
+            } else {
+                alert("ACCESS DENIED: WORD NOT FOUND IN REVISION.");
             }
         }
     </script>
