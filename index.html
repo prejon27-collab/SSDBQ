@@ -3,48 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The White Man's Burden | Digital Archive</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,700;1,400&family=Space+Mono&display=swap');
 
-        /* Archive Paper Aesthetic */
         body { 
             background-color: #f4f1ea; 
             background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
             font-family: 'Crimson Pro', serif;
             color: #2d2d2d;
-            transition: background 0.5s;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
         }
 
-        /* The "Static" Bright Spot */
+        /* Static Flicker Effect */
         .static-glitch {
             position: absolute;
-            width: 15px;
-            height: 15px;
-            background: rgba(255, 255, 255, 0.8);
-            filter: blur(2px);
-            cursor: crosshair;
+            width: 24px;
+            height: 24px;
+            background: rgba(255, 255, 255, 1);
+            filter: blur(4px);
+            cursor: pointer;
             animation: flicker 0.1s infinite;
-            opacity: 0.1;
+            opacity: 0;
             transition: opacity 0.3s;
+            z-index: 50;
         }
-        .static-glitch:hover { opacity: 1; box-shadow: 0 0 10px white; }
+        .static-glitch:hover { opacity: 1; box-shadow: 0 0 20px white; }
 
         @keyframes flicker {
             0% { opacity: 0.1; transform: scale(1); }
-            50% { opacity: 0.8; transform: scale(1.2); }
+            50% { opacity: 0.9; transform: scale(1.5); }
             100% { opacity: 0.1; transform: scale(1); }
         }
 
-        /* Dark "Evil" Overlay */
+        /* Secret Overlay */
         #secret-page {
             display: none;
             position: fixed;
             inset: 0;
-            background: #0a0a0a;
+            background: #0d0d0d;
             color: #e2e2e2;
-            z-index: 100;
+            z-index: 1000;
             padding: 40px;
             font-family: 'Space Mono', monospace;
             overflow-y: auto;
@@ -55,32 +56,60 @@
             background: transparent;
             outline: none;
             font-family: 'Space Mono', monospace;
-            width: 100px;
+            width: 140px;
             text-align: center;
+            font-size: 1.5rem;
+            color: #1a1a1a;
         }
 
-        .hidden-content { display: none; opacity: 0; transition: opacity 1s; }
-        .visible { display: block; opacity: 1; }
+        .truth-text {
+            color: #8b0000;
+            font-weight: bold;
+            display: none;
+            animation: reveal 1s ease-in forwards;
+        }
+
+        @keyframes reveal { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .manifest-box {
+            border: 1px solid #333;
+            padding: 20px;
+            background: #111;
+            margin-top: 20px;
+        }
     </style>
 </head>
-<body class="p-8 md:p-20">
+<body class="p-6 md:p-16">
 
-    <div id="archive-page" class="max-w-3xl mx-auto border-t-8 border-double border-stone-800 pt-12">
-        <h1 class="text-5xl font-bold uppercase tracking-tighter mb-12 text-center underline decoration-double">
+    <div id="archive-page" class="max-w-3xl mx-auto border-t-8 border-double border-stone-800 pt-16">
+        <div class="text-[10px] tracking-[0.5em] text-stone-400 mb-2 uppercase text-center">Official Archive // Access Level 01</div>
+        <h1 class="text-5xl font-bold uppercase tracking-tighter mb-16 text-center underline decoration-double">
             The White Man's Burden
         </h1>
 
-        <div class="stanza mb-12 relative">
-            <div class="static-glitch" style="top: 60px; right: 20%;" onclick="openSecret('ledger')"></div>
+        <div id="propaganda-zone" class="stanza mb-16 relative">
+            <div class="static-glitch" style="top: 20px; right: 10%;" onclick="openSecret('ledger')"></div>
             
-            <p class="text-3xl leading-relaxed">
-                'The White Man's Burden,' is a lie they tell<br>
+            <p id="p1" class="text-3xl leading-relaxed mb-10 text-stone-500">
+                Take up the White Man’s burden—<br>
+                Send forth the best ye breed—<br>
+                Go send your sons to exile<br>
+                To serve your captives' need
+            </p>
+            
+            <p id="t1" class="truth-text text-3xl leading-relaxed mb-10">
+                ‘The White Man’s Burden,’ is a lie they tell<br>
                 While turning peaceful lands to hell
             </p>
-        </div>
 
-        <div id="stanza-2" class="stanza mb-12">
-            <p class="text-3xl leading-relaxed">
+            <p id="p2" class="text-3xl leading-relaxed mb-10 text-stone-500">
+                To wait in heavy harness<br>
+                On fluttered folk and wild—<br>
+                Your new-caught, sullen peoples,<br>
+                Half devil and half child
+            </p>
+
+            <p id="t2" class="truth-text text-3xl leading-relaxed mb-10">
                 A man perched upon thrones of polished oak<br>
                 dressed from head to toe in heavy silk;<br>
                 To hide their immense greed beneath a righteous cloak<br>
@@ -89,43 +118,73 @@
             </p>
         </div>
 
-        <div class="mt-20 border-2 border-stone-300 p-8 text-center bg-white/50 rounded shadow-inner">
-            <p class="text-xs uppercase tracking-widest mb-4">Input Verification Code to Progress</p>
-            <input type="text" id="verify-1" class="code-input text-xl" placeholder="????">
-            <button onclick="checkCode()" class="ml-4 bg-stone-800 text-white px-6 py-2 text-xs uppercase hover:bg-red-900 transition-colors">Submit</button>
-            <p id="hint-text" class="mt-4 text-sm italic text-stone-500"></p>
-        </div>
-        
-        <div id="unlocked-stanzas" class="hidden-content mt-12 border-t-2 border-stone-200 pt-12">
-            <p class="text-3xl leading-relaxed">
-                They called the darker nations 'savage' and blind<br>
-                While leaving all ordinary human mercy behind...
-            </p>
+        <div id="lock-box" class="mt-24 border-2 border-stone-300 p-10 text-center bg-white/40 rounded">
+            <p class="text-[11px] uppercase tracking-[0.3em] mb-6 font-bold text-stone-500">Verification Required: Subject Deconstruction 01-A</p>
+            <div class="flex flex-col items-center gap-4">
+                <input type="text" id="verify-1" class="code-input" placeholder="????">
+                <button onclick="checkCode()" class="bg-black text-white px-8 py-3 text-xs uppercase hover:bg-red-800 transition-all">Submit Entry</button>
             </div>
+            <p id="hint-1" class="mt-6 text-sm italic"></p>
+        </div>
+
+        <div id="final-truth" class="hidden mt-16 pt-16 border-t-4 border-red-900">
+            <p class="text-[10px] tracking-[0.5em] text-red-700 mb-8 uppercase font-bold text-center">Status: Revised // Original Manuscript Recovered</p>
+            
+            <div class="space-y-12 text-3xl leading-relaxed text-red-900">
+                <p>
+                    They called the darker nations ‘savage’ and blind<br>
+                    While leaving all ordinary human mercy behind<br>
+                    Condemning the savage through his lips stained with wine
+                </p>
+                <p>
+                    Acting as vultures with a line and a chain<br>
+                    The savages are the ones consumed by greed—true swine who take more than they could ever need<br>
+                    Who ignore a fellow human’s desperate plea<br>
+                    The burden is a mask they wear
+                </p>
+                <p>
+                    The savage is the one who sits in state<br>
+                    And looks upon his brother with deep hate<br>
+                    The savage is not the one whom they have defined<br>
+                    But instead the master with a cruel and narrow mind<br>
+                    The burden is a mask they wear
+                </p>
+                <p class="text-stone-800">
+                    He counts dividends and carves the land,<br>
+                    He boasts of burdens -weight never truly felt-<br>
+                    Completely ignoring the pain his white hands dealt<br>
+                    He gifts a textbook to a mind they’ve already confined<br>
+                    To heal the sickness only he had designed
+                </p>
+                <p class="text-4xl font-black italic border-t border-stone-400 pt-10">
+                    The African’s weary shoulder, bruised by the White Man’s lie.<br>
+                    The burden is a mask they wear
+                </p>
+            </div>
+        </div>
     </div>
 
     <div id="secret-page">
-        <button onclick="closeSecret()" class="text-red-500 underline mb-10 text-xs tracking-widest">← BACK TO ARCHIVE</button>
+        <button onclick="closeSecret()" class="text-red-500 underline mb-12 text-[10px] tracking-[0.4em] font-bold">← EXIT CLASSIFIED VIEW</button>
         
-        <div id="ledger-content">
-            <h2 class="text-red-600 text-xl font-bold mb-6">[ CLASSIFIED MANIFEST: CARGO_09 ]</h2>
-            <div class="border border-stone-800 p-6 bg-stone-900 leading-loose">
-                <p>DATE: 1898 | SHIP: SS MAJESTIC</p>
-                <hr class="border-stone-800 my-4">
-                <p>ITEM: POLISHED OAK THRONES [QTY: 12]</p>
-                <p>ITEM: <span class="text-white font-bold underline">HEAVY SILK BOLTS [QTY: 0422]</span></p>
-                <p>ITEM: OPIUM VINTAGE [QTY: 500]</p>
-                <hr class="border-stone-800 my-4">
-                <p class="text-xs italic text-stone-500 italic">"Extracted from native village at 0400 hrs. No payment rendered."</p>
+        <div id="ledger-view">
+            <h2 class="text-red-600 text-2xl font-bold mb-8 italic text-center">[ INTERNAL MANUSCRIPT 01-A ]</h2>
+            <div class="manifest-box">
+                <p class="text-stone-400 mb-4">"dressed from head to toe in heavy silk..."</p>
+                <p class="text-sm leading-relaxed text-stone-300">
+                    The "Burden" as written by Kipling was a shield for extraction. The revised text reveals the master's true silk is woven from <strong>0422</strong> stolen units.
+                </p>
+                <div class="mt-8 p-4 border border-stone-800 bg-stone-900 text-stone-500 text-xs">
+                    Access Code: 0422<br>
+                    Subject: Deconstruction of narrative 01-A
+                </div>
             </div>
-            <p class="mt-10 text-stone-400 text-sm">Context Clue: In the poem, what word does the author use to describe the expensive material used for the colonist's clothing? Locate the quantity of this material in the manifest above.</p>
         </div>
     </div>
 
     <script>
         function openSecret(type) {
             document.getElementById('secret-page').style.display = 'block';
-            // Here we could switch content based on 'type'
         }
 
         function closeSecret() {
@@ -134,14 +193,24 @@
 
         function checkCode() {
             const val = document.getElementById('verify-1').value;
-            // The code is 0422 (The quantity of silk found in the secret page)
             if (val === "0422") {
-                document.getElementById('unlocked-stanzas').classList.add('visible');
-                document.getElementById('hint-text').innerText = "LAYER 01 DECRYPTED.";
-                document.getElementById('hint-text').style.color = "green";
+                // HIDE KIPLING
+                document.getElementById('p1').style.display = 'none';
+                document.getElementById('p2').style.display = 'none';
+                
+                // SHOW YOUR POEM (PART 1)
+                document.getElementById('t1').style.display = 'block';
+                document.getElementById('t2').style.display = 'block';
+                
+                // REVEAL REST OF YOUR POEM
+                document.getElementById('final-truth').classList.remove('hidden');
+                document.getElementById('lock-box').style.opacity = "0.2";
+                document.getElementById('hint-1').innerText = "REVISED RECORD RESTORED.";
+                document.getElementById('hint-1').style.color = "green";
+                document.body.style.backgroundColor = "#fdfcf8";
             } else {
-                document.getElementById('hint-text').innerText = "INVALID CODE. Investigating the glitch near 'silk' may yield results.";
-                document.getElementById('hint-text').style.color = "red";
+                document.getElementById('hint-1').innerText = "INVALID ENTRY. Locate the flicker near the Kipling stanzas.";
+                document.getElementById('hint-1').style.color = "#8b0000";
             }
         }
     </script>
