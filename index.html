@@ -2,156 +2,146 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Archive // Manuscript_01-A</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,700;1,400&family=Space+Mono&display=swap');
-
-        body { 
-            background-color: #f4f1ea; 
-            background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
-            font-family: 'Crimson Pro', serif;
-            color: #2d2d2d;
-            margin: 0; padding: 0; overflow-x: hidden;
-        }
-
-        /* Glitch Effects */
-        .flicker-spot {
-            position: absolute; width: 15px; height: 15px;
-            background: white; filter: blur(4px); cursor: pointer;
-            animation: pulse 0.1s infinite; opacity: 0; transition: opacity 0.3s; z-index: 100;
-        }
-        .flicker-spot:hover { opacity: 1; }
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.5); } 100% { transform: scale(1); } }
-
-        /* Overlays */
-        #black-ops-layer {
-            display: none; position: fixed; inset: 0; background: #080808;
-            color: #d1d1d1; z-index: 2000; padding: 40px; font-family: 'Space Mono', monospace;
-        }
-
-        .code-entry {
-            border: none; border-bottom: 2px solid #333; background: transparent;
-            color: #8b0000; font-family: 'Space Mono', monospace; text-align: center;
-            width: 180px; outline: none; font-size: 1.2rem;
-        }
-
-        .truth-stanza { color: #8b0000; font-weight: bold; display: none; margin-bottom: 2rem; }
-        .propaganda { transition: opacity 0.5s; }
+        body { background-color: #f4f1ea; font-family: 'Crimson Pro', serif; color: #2d2d2d; transition: all 1s; }
+        .glitch-trigger { position: absolute; width: 40px; height: 40px; background: white; filter: blur(10px); cursor: pointer; opacity: 0; animation: pulse 0.1s infinite; }
+        .glitch-trigger:hover { opacity: 0.8; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
         
-        .secret-doc { border: 1px solid #222; padding: 20px; background: #111; margin-bottom: 20px; }
-        .stamp { border: 3px solid #8b0000; color: #8b0000; padding: 5px; transform: rotate(-10deg); display: inline-block; font-weight: bold; }
+        #hacker-ui { display: none; position: fixed; inset: 0; background: #0a0a0a; color: #00ff41; z-index: 1000; padding: 40px; font-family: 'Space Mono', monospace; }
+        .digit-slot { border: 2px dashed #333; width: 60px; height: 80px; display: flex; align-items: center; justify-content: center; font-size: 3rem; color: #8b0000; }
+        .truth-text { color: #8b0000; font-weight: bold; display: none; margin-bottom: 1.5rem; }
+        .redacted { background: #111; color: #111; cursor: crosshair; }
+        .redacted:hover { color: #8b0000; }
     </style>
 </head>
-<body class="p-8 md:p-24">
+<body class="p-10">
 
-    <div class="max-w-3xl mx-auto border-l border-stone-300 pl-10">
-        <div class="text-[10px] tracking-[0.5em] text-stone-400 mb-8 uppercase italic">Ref: R. Kipling, 1899 // Manuscript_01-A</div>
-        <h1 class="text-5xl font-bold uppercase tracking-tighter mb-16">The White Man's Burden</h1>
+    <div class="max-w-3xl mx-auto border-t-2 border-stone-800 pt-10">
+        <header class="mb-10 text-center">
+            <p class="text-[10px] tracking-[0.4em] text-stone-400 mb-2 uppercase">Ref: R. Kipling // Archive_1899</p>
+            <h1 id="title" class="text-5xl font-bold uppercase transition-all duration-1000">The White Man's Burden</h1>
+        </header>
 
-        <div class="relative mb-12">
-            <div id="spot-1" class="flicker-spot" style="top: 10px; right: 0;" onclick="viewSecret('ledger')"></div>
-            <p id="prop-1" class="propaganda text-3xl leading-relaxed text-stone-400">
-                Take up the White Man’s burden—<br>
-                Send forth the best ye breed—<br>
-                Go send your sons to exile<br>
-                To serve your captives' need
-            </p>
-            <p id="truth-1" class="truth-stanza text-3xl leading-relaxed">
-                ‘The White Man’s Burden,’ is a lie they tell<br>
-                While turning peaceful lands to hell
-            </p>
+        <div class="relative space-y-8 text-2xl leading-relaxed">
+            <div class="glitch-trigger" style="top: 0; right: 0;" onclick="openBreach()"></div>
+            
+            <p id="k1" class="text-stone-400 italic">Take up the White Man’s burden— Send forth the best ye breed— Go send your sons to exile To serve your captives' need...</p>
+            <p id="t1" class="truth-text">‘The White Man’s Burden,’ is a lie they tell While turning peaceful lands to hell. A man dressed from head to toe in heavy silk.</p>
+            
+            <p id="k2" class="text-stone-400 italic">Take up the White Man's burden-- The savage wars of peace-- Fill full the mouth of Famine And bid the sickness cease;</p>
+            <p id="t2" class="truth-text">He counts dividends and carves the land, He gifts a textbook to a mind they’ve already confined To heal the sickness only he had designed.</p>
         </div>
 
-        <div class="relative mb-12">
-            <div id="spot-2" class="flicker-spot" style="top: 10px; left: -20px; display:none;" onclick="viewSecret('medical')"></div>
-            <p id="prop-2" class="propaganda text-3xl leading-relaxed text-stone-400">
-                Fill full the mouth of Famine<br>
-                And bid the sickness cease;<br>
-                And when your goal is nearest<br>
-                The end for others sought...
-            </p>
-            <p id="truth-2" class="truth-stanza text-3xl leading-relaxed">
-                The savages are the ones consumed by greed—true swine who take more than they could ever need<br>
-                Who ignore a fellow human’s desperate plea
-            </p>
-        </div>
-
-        <div class="relative mb-12">
-            <p id="prop-3" class="propaganda text-3xl leading-relaxed text-stone-400">
-                Watch sloth and heathen Folly<br>
-                Bring all your hopes to nought.
-            </p>
-            <div id="truth-3" class="truth-stanza text-3xl leading-relaxed">
-                The African’s weary shoulder, bruised by the White Man’s lie.<br>
-                <span class="italic">The burden is a mask they wear</span>
+        <div class="mt-20 p-6 bg-white border border-stone-200 shadow-sm">
+            <p class="text-[10px] font-bold uppercase tracking-widest mb-4">Year Key Recovery: [ <span id="progress">0</span> / 4 ]</p>
+            <div class="flex gap-4 justify-center mb-6">
+                <div id="slot-1" class="digit-slot">?</div>
+                <div id="slot-2" class="digit-slot">?</div>
+                <div id="slot-3" class="digit-slot">?</div>
+                <div id="slot-4" class="digit-slot">?</div>
             </div>
-        </div>
-
-        <div class="mt-20 p-8 border border-stone-200 bg-white/50">
-            <p id="instr" class="text-[10px] uppercase font-bold mb-4 tracking-widest text-stone-500">System Locked: Locate Primary Glitch</p>
-            <input type="text" id="terminal" class="code-entry" placeholder="ENTER KEY">
-            <button onclick="processKey()" class="ml-4 bg-black text-white px-6 py-2 text-xs hover:bg-red-800">EXECUTE</button>
+            <button id="final-btn" onclick="executeFinal()" class="hidden w-full bg-black text-white py-4 font-bold hover:bg-red-900">EXECUTE REVISION</button>
         </div>
     </div>
 
-    <div id="black-ops-layer">
-        <button onclick="closeSecret()" class="text-red-700 underline mb-10 text-[10px] tracking-widest">← CLOSE FILE</button>
-        
-        <div id="doc-ledger" style="display:none;">
-            <div class="stamp mb-4">CONFIDENTIAL</div>
-            <div class="secret-doc">
-                <p class="mb-4 text-white">Subject: Revenue Extraction</p>
-                <p>The "Burden" justifies the removal of resources. Silk units seized: <span class="text-white font-bold underline">0422</span>.</p>
+    <div id="hacker-ui">
+        <div class="max-w-2xl mx-auto">
+            <button onclick="closeBreach()" class="text-stone-500 underline mb-10 text-xs hover:text-white">← RETURN TO ENCRYPTION</button>
+            
+            <div id="step-1" class="mb-10 p-6 border border-stone-800">
+                <p class="text-sm mb-4 italic text-stone-400">Task 1: The Material of Greed. Paste the line from the manuscript that mentions his clothing.</p>
+                <input type="text" id="input-1" class="bg-transparent border-b border-green-900 w-full outline-none text-green-500 mb-4" placeholder="INPUT LINE...">
+                <button onclick="checkStep1()" class="text-[10px] border border-green-900 px-4 py-1 hover:bg-green-900">EXTRACT DIGIT 1</button>
             </div>
-        </div>
 
-        <div id="doc-medical" style="display:none;">
-            <div class="stamp mb-4">REVISED NARRATIVE</div>
-            <div class="secret-doc">
-                <p class="mb-4 text-white">Subject: Pathogen Design</p>
-                <p>The archive says we cease the sickness. The reality is the master heals only the sickness he <span class="text-white font-bold underline">DESIGNED</span>.</p>
+            <div id="step-2" class="hidden mb-10 p-6 border border-stone-800">
+                <p class="text-sm mb-4 text-stone-400">Task 2: The Dividend. In the "Lie", he counts his gains. Find the hidden number in the ledger below.</p>
+                <p class="text-xs bg-black p-4 leading-loose">
+                    SHIPMENT_ID: 0092<br>
+                    RESOURCES_SEIZED: [REDACTED]<br>
+                    TOTAL_PROFIT_MULTIPLIER: <span class="redacted px-4">8</span><br>
+                    CONFISCATION_STATUS: COMPLETE
+                </p>
+                <button onclick="checkStep2()" class="mt-4 text-[10px] border border-green-900 px-4 py-1 hover:bg-green-900">EXTRACT DIGIT 2</button>
+            </div>
+
+            <div id="step-3" class="hidden mb-10 p-6 border border-stone-800">
+                <p class="text-sm mb-4 text-stone-400">Task 3: The Sickness. Who designed it? (One word answer from your poem).</p>
+                <input type="text" id="input-3" class="bg-transparent border-b border-green-900 w-full outline-none text-green-500 mb-4" placeholder="ENTER WORD...">
+                <button onclick="checkStep3()" class="text-[10px] border border-green-900 px-4 py-1 hover:bg-green-900">EXTRACT DIGIT 3</button>
+            </div>
+
+            <div id="step-4" class="hidden mb-10 p-6 border border-stone-800">
+                <p class="text-sm mb-4 text-stone-400">Task 4: The Shoulder. The African's shoulder is bruised by what? (Last word of the poem line).</p>
+                <input type="text" id="input-4" class="bg-transparent border-b border-green-900 w-full outline-none text-green-500 mb-4" placeholder="ENTER WORD...">
+                <button onclick="checkStep4()" class="text-[10px] border border-green-900 px-4 py-1 hover:bg-green-900">EXTRACT DIGIT 4</button>
             </div>
         </div>
     </div>
 
     <script>
-        let stage = 1;
+        let progress = 0;
 
-        function viewSecret(type) {
-            document.getElementById('black-ops-layer').style.display = 'block';
-            document.getElementById('doc-ledger').style.display = (type === 'ledger') ? 'block' : 'none';
-            document.getElementById('doc-medical').style.display = (type === 'medical') ? 'block' : 'none';
+        function openBreach() { document.getElementById('hacker-ui').style.display = 'block'; }
+        function closeBreach() { document.getElementById('hacker-ui').style.display = 'none'; }
+
+        function checkStep1() {
+            let val = document.getElementById('input-1').value.toLowerCase();
+            if (val.includes("heavy silk")) {
+                document.getElementById('slot-1').innerText = "1";
+                document.getElementById('step-1').classList.add('opacity-20');
+                document.getElementById('step-2').classList.remove('hidden');
+                updateProgress();
+            }
         }
 
-        function closeSecret() {
-            document.getElementById('black-ops-layer').style.display = 'none';
+        function checkStep2() {
+            document.getElementById('slot-2').innerText = "8";
+            document.getElementById('step-2').classList.add('opacity-20');
+            document.getElementById('step-3').classList.remove('hidden');
+            updateProgress();
         }
 
-        function processKey() {
-            const val = document.getElementById('terminal').value.toUpperCase().trim();
-            
-            if (stage === 1 && val === "0422") {
-                document.getElementById('prop-1').style.display = 'none';
-                document.getElementById('truth-1').style.display = 'block';
-                document.getElementById('spot-2').style.display = 'block';
-                document.getElementById('instr').innerText = "Secondary Glitch Detected near 'Famine'";
-                document.getElementById('terminal').value = "";
-                stage = 2;
-            } 
-            else if (stage === 2 && val === "DESIGNED") {
-                document.getElementById('prop-2').style.display = 'none';
-                document.getElementById('truth-2').style.display = 'block';
-                document.getElementById('instr').innerText = "Enter Publication Year to Complete Deconstruction";
-                document.getElementById('terminal').value = "";
-                stage = 3;
+        function checkStep3() {
+            let val = document.getElementById('input-3').value.toLowerCase();
+            if (val.includes("he") || val.includes("master")) {
+                document.getElementById('slot-3').innerText = "9";
+                document.getElementById('step-3').classList.add('opacity-20');
+                document.getElementById('step-4').classList.remove('hidden');
+                updateProgress();
             }
-            else if (stage === 3 && val === "1899") {
-                document.getElementById('prop-3').style.display = 'none';
-                document.getElementById('truth-3').style.display = 'block';
-                document.getElementById('instr').innerText = "DECONSTRUCTION COMPLETE: 01-A RESTORED";
-                document.getElementById('terminal').style.display = "none";
+        }
+
+        function checkStep4() {
+            let val = document.getElementById('input-4').value.toLowerCase();
+            if (val.includes("lie")) {
+                document.getElementById('slot-4').innerText = "9";
+                document.getElementById('step-4').classList.add('opacity-20');
+                updateProgress();
             }
+        }
+
+        function updateProgress() {
+            progress++;
+            document.getElementById('progress').innerText = progress;
+            if (progress === 4) {
+                document.getElementById('final-btn').classList.remove('hidden');
+                alert("YEAR KEY RECOVERED: 1899");
+            }
+        }
+
+        function executeFinal() {
+            document.getElementById('title').innerText = "The White Man's Lie";
+            document.getElementById('title').style.color = "#8b0000";
+            document.getElementById('k1').style.display = "none";
+            document.getElementById('k2').style.display = "none";
+            document.querySelectorAll('.truth-text').forEach(el => el.style.display = 'block');
+            document.body.style.backgroundColor = "#fffcfc";
+            closeBreach();
         }
     </script>
 </body>
